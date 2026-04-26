@@ -44,6 +44,10 @@ class CoverageReporter:
     def _normalize_url(self, url: str) -> str:
         if not url:
             return ""
+        # Strip base_url if present (sitemap stores full URLs, results may use paths)
+        base = self.sitemap.base_url.rstrip("/")
+        if url.startswith(base):
+            url = url[len(base):]
         url = url.split("#")[0].rstrip("/")
         return url or "/"
 
@@ -51,7 +55,7 @@ class CoverageReporter:
         total = len(self.sitemap.routes)
         tested = sum(
             1 for r in self.sitemap.routes
-            if self._normalize_url(r.url) in [self._normalize_url(x) for x in self.results.keys()]
+            if self._normalize_url(r.url) in self.results.keys()
         )
         passed = sum(1 for x in self.results.values() if x.get("status") == "PASS")
         failed = sum(1 for x in self.results.values() if x.get("status") == "FAIL")
