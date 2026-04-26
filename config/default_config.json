@@ -1,0 +1,60 @@
+{
+  "base_url": "http://localhost:3000",
+  "auth": {
+    "enabled": false,
+    "login_url": "/login",
+    "username_field": "input[type='text'], input[name='username'], input[placeholder*='用户']",
+    "password_field": "input[type='password']",
+    "submit_button": "button[type='submit'], button:has-text('登录'), button:has-text('登 录')",
+    "post_login_url_pattern": "**/(dashboard|statistics|incidents|home)**",
+    "credentials": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "crawl": {
+    "max_depth": 3,
+    "max_pages": 200,
+    "respect_robots_txt": true,
+    "user_agent": "webapp-autotest/1.0 (+https://github.com/ai-autotest/webapp-autotest)"
+  },
+  "discovery": {
+    "strategies_order": ["static", "sitemap", "crawl"],
+    "static_roots": ["src/app"],
+    "exclude_patterns": ["**/login/**", "**/[auth]/**", "**/_app/**", "**/__pycache__/**"],
+    "include_api_routes": true
+  },
+  "checklist": {
+    "priority_rules": {
+      "critical_keywords": ["dashboard", "statistics", "incidents", "reports", "admin", "auth", "login", "analysis", "overview"],
+      "edge_keywords": ["detail", "[id]", "[pk]", "[slug]", "edit", "setting", "config"]
+    },
+    "phase_budgets": {
+      "A_critical": 20,
+      "B_standard": 50,
+      "C_edge": 30
+    }
+  },
+  "interact": {
+    "timeout_ms": 15000,
+    "screenshot_on_error": true,
+    "scroll_stable_threshold": 3,
+    "scroll_max_attempts": 20,
+    "scroll_delay_ms": 1500,
+    "modal_dom_selectors": [
+      ".ant-modal",
+      "[role='dialog']",
+      ".modal",
+      ".el-dialog",
+      ".MuiDialog-root",
+      ".vp-dialog"
+    ]
+  },
+  "output": {
+    "artifacts_dir": "test-artifacts/webapp-autotest",
+    "screenshots_dir": "screenshots",
+    "checklist_file": "checklist.md",
+    "report_file": "report.md",
+    "sitemap_file": "sitemap.json"
+  }
+}
